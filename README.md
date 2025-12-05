@@ -78,13 +78,16 @@ Step 7 → FINAL TEST – Watch the magic happen
 
 # Flow of project day1
 
+
 Source Systems (CSV Files)
+
     ├── ATM Transactions (atm_sample.csv)
     ├── UPI Payments (upi_sample.csv)
     └── Customer Master (customers_master.csv)
                 │
                 ▼
 Azure Data Lake Storage Gen2 (Landing Zone)
+
     ├── raw-atm
     ├── raw-upi
     ├── raw-transactions
@@ -93,9 +96,11 @@ Azure Data Lake Storage Gen2 (Landing Zone)
                 ▼
 Azure Event Grid
     └── Event Subscription: raw-containers-to-function
+    
                 │
                 ▼
 Azure Functions (Python)
+
     └── BlobCreatedTrigger
           ├ Logs event
           ├ Extracts blob URL & container
@@ -104,4 +109,5 @@ Azure Functions (Python)
                 │
                 ▼
 Azure Service Bus
+
     └── Queue: ingestion-queue
