@@ -1,7 +1,11 @@
 # Complete Banking Domain Project
+
 ## Project Outline
+
 ### Day-1 :- Architecture & Data Ingestion Layer
+
 ### Architecture
+
 Step 1 → Create Storage Account (ADLS Gen2) + 4 Containers
 1.	Top search → type “Storage accounts” → click it
 2.	Click + Create
@@ -19,7 +23,10 @@ o	Redundancy: Locally-redundant storage (LRS)
 •	raw-atm
 •	raw-upi
 9.	Public access level → Private → Create each one
+
+    
 Step 2 → Upload Random Banking Dataset
+
 Step 3 → Create Service Bus + Queue
 1.	Top search → “Service Bus” → click it
 2.	Click + Create
@@ -43,12 +50,16 @@ o	Publish: Code
 o	Runtime stack: Python
 4.	Click Review + create → Create 
 5.	After created → click Go to resource
+
+   
 Step 5 → Create Event Grid Trigger Function 
 1.	In your Function App → left menu → Functions → click + Create
 2.	Choose:
 o	Development environment: Develop in portal
 o	Select a template: Azure Event Grid trigger
 o	New function name: BlobCreatedTrigger → Click Create
+
+
 Step 6 → Connect Event Grid to Your Function (Portal only)
 1.	Go back to your Storage Account (azurebankstorage999…)
 2.	Left menu → Events (under Data management)
@@ -59,6 +70,8 @@ o	Event Types: Check only Blob Created
 o	Endpoint type: Azure Function
 o	Endpoint: Choose subscription → resource group → your Function App → BlobCreatedTrigger
 5.	Click Create
+
+   
 Step 7 → FINAL TEST – Watch the magic happen
 1.	Go to container raw-atm
 2.	Upload the same atm_sample.csv again 
