@@ -74,4 +74,50 @@ o	Endpoint: Choose subscription → resource group → your Function App → Blo
    
 Step 7 → FINAL TEST – Watch the magic happen
 1.	Go to container raw-atm
-2.	Upload the same atm_sample.csv again 
+2.	Upload the same atm_sample.csv again
+
+# Flow of project day1
+
+1. Source Systems (Simulated Banking Channels)
+├── ATM Transactions          → CSV file (atm_sample.csv)
+├── UPI Payments              → CSV file (upi_sample.csv)
+└── Customer Master           → CSV file (customers_master.csv)
+
+2. Landing Zone – Azure Data Lake Storage Gen2 (ADLS Gen2)
+   Storage Account: azurebankstorage999… (Hierarchical namespace = Enabled)
+   Containers created:
+   ├─ raw-atm
+   ├─ raw-upi
+   ├─ raw-transactions
+   └─ raw-customers
+   → All sample files successfully uploaded
+
+3. Event Capture – Azure Event Grid
+   Event Subscription Name: raw-containers-to-function
+   Trigger: Blob Created
+   Filter: Subject begins with  /containers/raw-
+   → Any new file in any raw-* container instantly fires an event
+
+4. Real-Time Processor – Azure Functions (Python)
+   Function App: azurebank-ingestion-func (Linux, Consumption)
+   Function Name: BlobCreatedTrigger (Event Grid trigger)
+   What it does the moment a file lands:
+   ├─ Logs the event
+   ├─ Extracts full blob URL and container name
+   ├─ Builds JSON message
+   └─ Pushes message to Service Bus queue
+
+5. Orchestration Queue – Azure Service Bus
+   Namespace: azurebank-sb (Standard tier)
+   Queue: ingestion-queue
+   → Every uploaded file results in exactly ONE message sitting here
+     (you can see active message count = 1 after test upload)
+
+6. End-to-End Test Flow (You already executed this successfully)
+   1. Upload atm_sample.csv → raw-atm container
+   2. Event Grid instantly detects Blob Created
+   3. BlobCreatedTrigger function executes (visible in Monitor → Logs)
+   4. Function pushes JSON message to ingestion-queue
+   5. Service Bus queue shows Active message count = 1
+
+Result after Day 1
